@@ -14,6 +14,15 @@ var bounceC = function() {
     var radius = Math.floor(Math.random()*10) + 10;
     var xcor = Math.floor(Math.random()*400) + 50;
     var ycor = Math.floor(Math.random()*200) + 50;
+    var getx = function(){
+    	return xcor;
+    }
+    var gety = function(){
+    	return ycor;
+    }
+    var getr = function(){
+    	return radius;
+    }
     var xchange = 1;
     var ychange = 1;
     var color= '#'+Math.floor(Math.random()*16777215).toString(16);
@@ -24,26 +33,26 @@ var bounceC = function() {
 	//this is what should bounce the balls off each other, but i cant seem to access any of the variables in each Object, just returns undefined
 	for (others in dict){
 	    if (xchange == 1){
-		if (others.xcor - others.radius <= xcor + radius){
+		if (others.getx - others.getr <= xcor + radius){
 		    aroundx = true;
 		}else{
 		    aroundx = false;
 		}
 	    }else{
-		if (others.xcor + others.radius >= xcor - radius){
+		if (others.getx + others.getr >= xcor - radius){
 		    aroundx = true;
 		}else{
 		    aroundx = false;
 		}
 	    }
 	    if (ychange == 1){
-		if (others.ycor + others.radius >= ycor - radius){
+		if (others.gety + others.getr >= ycor - radius){
 		    aroundy = true;
 		}else{
 		    aroundy = false;
 		}
 	    }else{
-		if (others.ycor - others.radius <= ycor + radius){
+		if (others.gety - others.getr <= ycor + radius){
 		    aroundy = true;
 		}else{
 		    aroundy = false;
@@ -67,6 +76,9 @@ var bounceC = function() {
 	ycor += ychange;
     };
     return {
+    getx:getx,
+    gety:gety,
+    getr:getr,
 	number:number,
 	animate:animate
     }
