@@ -5,6 +5,7 @@ var stop = document.getElementById("stop");
 var dict = {};
 var list = [];
 var current = 0;
+var id =[];
 
 
 var bounceC = function() {
@@ -14,6 +15,9 @@ var bounceC = function() {
     var radius = Math.floor(Math.random()*10) + 10;
     var xcor = Math.floor(Math.random()*400) + 50;
     var ycor = Math.floor(Math.random()*200) + 50;
+    var getc = function(){
+    	return c;
+    }
     var getx = function(){
     	return xcor;
     }
@@ -69,6 +73,7 @@ var bounceC = function() {
 	ycor += ychange;
     };
     return {
+    getc:getc,
 	getn:getn,
 	getx:getx,
 	gety:gety,
@@ -81,8 +86,9 @@ var bounceC = function() {
 function create() {
     var hold = bounceC();
     hold.number = current;
-    setInterval(hold.animate,10);
+    var frameid = setInterval(hold.animate,10);
     dict[current] = hold;
+    id.push(frameid);
     //list.push(hold);
     current++;
     console.log(dict);
@@ -93,13 +99,22 @@ function create() {
 
 function clear(){
     console.log("clear");
-    dict = {};
+    //dict = {};
     console.log(dict);
-    while (pic.lastChild) {
-	console.log(pic.lastChild);
-	pic.removeChild(pic.lastChild);
+    //while (pic.lastChild) {
+	//console.log(pic.lastChild);
+	//pic.removeChild(pic.lastChild);
+    //}
+    //console.log(pic)
+    for (other in dict){
+    	pic.removeChild(dict[other].getc());
     }
-    console.log(pic)
+    dict={};
+    console.log(id);
+    for (x in id){
+    	console.log(x);
+    	clearInterval(id[x]);
+    }
 }
     
 start.addEventListener("click",create);
