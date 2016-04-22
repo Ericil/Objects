@@ -23,6 +23,9 @@ var bounceC = function() {
     var getr = function(){
     	return radius;
     }
+    var getn = function(){
+	return number;
+    }
     var xchange = 1;
     var ychange = 1;
     var color= '#'+Math.floor(Math.random()*16777215).toString(16);
@@ -30,32 +33,22 @@ var bounceC = function() {
 	//if you reach width limits
 	var aroundx = false;
 	var aroundy = false;
-	//this is what should bounce the balls off each other, but i cant seem to access any of the variables in each Object, just returns undefined
+	//they sometimes glitch
 	for (others in dict){
-	    if (xchange == 1){
-		if (others.getx - others.getr <= xcor + radius){
-		    aroundx = true;
-		}else{
-		    aroundx = false;
-		}
-	    }else{
-		if (others.getx + others.getr >= xcor - radius){
-		    aroundx = true;
-		}else{
-		    aroundx = false;
-		}
-	    }
-	    if (ychange == 1){
-		if (others.gety + others.getr >= ycor - radius){
-		    aroundy = true;
-		}else{
-		    aroundy = false;
-		}
-	    }else{
-		if (others.gety - others.getr <= ycor + radius){
-		    aroundy = true;
-		}else{
-		    aroundy = false;
+	    if (dict[others].getn() != getn()){
+		var otherx = dict[others].getx();
+		var othery = dict[others].gety();
+		var otherr = dict[others].getr();
+		var tx = getx();
+		var ty = gety();
+		var tr = getr();
+		if (Math.pow(otherx - tx, 2)  + Math.pow(othery - ty, 2) <= Math.pow(otherr + tr, 2)){
+		    var angle = Math.atan(Math.abs(othery - ty)/Math.abs(otherx - tx));
+		    if (angle <= 1 && angle >= -1){
+			aroundy = true;
+		    }else{
+			aroundx = true;
+		    }
 		}
 	    }
 	}
@@ -76,9 +69,10 @@ var bounceC = function() {
 	ycor += ychange;
     };
     return {
-    getx:getx,
-    gety:gety,
-    getr:getr,
+	getn:getn,
+	getx:getx,
+	gety:gety,
+	getr:getr,
 	number:number,
 	animate:animate
     }
@@ -97,5 +91,16 @@ function create() {
     }
 }
 
+function clear(){
+    console.log("clear");
+    dict = {};
+    console.log(dict);
+    while (pic.lastChild) {
+	console.log(pic.lastChild);
+	pic.removeChild(pic.lastChild);
+    }
+    console.log(pic)
+}
     
 start.addEventListener("click",create);
+clearbutton.addEventListener("click", clear);
