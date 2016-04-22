@@ -2,6 +2,8 @@ var pic = document.getElementById("vimg");
 var clearbutton = document.getElementById("clear");
 var start = document.getElementById("start");
 var stop = document.getElementById("stop");
+var deleting = document.getElementById("delete");
+var accel = document.getElementById("accel");
 var dict = {};
 var list = [];
 var current = 0;
@@ -30,6 +32,19 @@ var bounceC = function() {
     var getn = function(){
 	return number;
     }
+    var getxchange = function(){
+	return xchange;
+    }
+    var getychange = function(){
+	return ychange;
+    }
+
+    var setxchange = function(setting){
+	xchange = setting;
+    }
+    var setychange = function(setting){
+	ychange = setting;
+    }
     var xchange = 1;
     var ychange = 1;
     var color= '#'+Math.floor(Math.random()*16777215).toString(16);
@@ -38,11 +53,11 @@ var bounceC = function() {
 	var aroundx = false;
 	var aroundy = false;
 	//they sometimes glitch
-	for (others in dict){
-	    if (dict[others].getn() != getn()){
-		var otherx = dict[others].getx();
-		var othery = dict[others].gety();
-		var otherr = dict[others].getr();
+	for (others in list){
+	    if (list[others].getn() != getn()){
+		var otherx = list[others].getx();
+		var othery = list[others].gety();
+		var otherr = list[others].getr();
 		var tx = getx();
 		var ty = gety();
 		var tr = getr();
@@ -73,7 +88,9 @@ var bounceC = function() {
 	ycor += ychange;
     };
     return {
-    getc:getc,
+	setxchange:setxchange,
+	setychange:setychange,
+	getc:getc,
 	getn:getn,
 	getx:getx,
 	gety:gety,
@@ -87,35 +104,48 @@ function create() {
     var hold = bounceC();
     hold.number = current;
     var frameid = setInterval(hold.animate,10);
-    dict[current] = hold;
+    list[current] = hold;
     id.push(frameid);
     //list.push(hold);
     current++;
-    console.log(dict);
-    for (x in dict){
+    console.log(list);
+    for (x in list){
 	console.log(x);
     }
 }
 
 function clear(){
-    console.log("clear");
-    //dict = {};
-    console.log(dict);
-    //while (pic.lastChild) {
-	//console.log(pic.lastChild);
-	//pic.removeChild(pic.lastChild);
-    //}
-    //console.log(pic)
-    for (other in dict){
-    	pic.removeChild(dict[other].getc());
+    for (other in list){
+    	pic.removeChild(list[other].getc());
     }
-    dict={};
+    list = [];
     console.log(id);
     for (x in id){
     	console.log(x);
     	clearInterval(id[x]);
     }
 }
-    
+
+function remove(){
+    if (list.length != 0){
+	console.log(list);
+	pic.removeChild(list[current-1].getc());
+	clearInterval(id[current-1]);
+	list.pop();
+	id.pop();
+	current--;
+    }else{
+	console.log("stop pressing this button");
+    }
+}
+/*
+function accelerate(){
+    if (list.length != 0){
+	list.map(function(x) {x.setxchange(x.getxchange * 2); return x;});
+    }
+}
+*/
+accel.addEventListener("click", accelerate);
+deleting.addEventListener("click", remove);
 start.addEventListener("click",create);
 clearbutton.addEventListener("click", clear);
