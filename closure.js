@@ -17,6 +17,8 @@ var bounceC = function() {
     var radius = Math.floor(Math.random()*10) + 10;
     var xcor = Math.floor(Math.random()*400) + 50;
     var ycor = Math.floor(Math.random()*200) + 50;
+    var xchange = 1;
+    var ychange = 1;
     var getc = function(){
     	return c;
     }
@@ -45,8 +47,6 @@ var bounceC = function() {
     var setychange = function(setting){
 	ychange = setting;
     }
-    var xchange = 1;
-    var ychange = 1;
     var color= '#'+Math.floor(Math.random()*16777215).toString(16);
     var animate = function() {
 	//if you reach width limits
@@ -71,11 +71,11 @@ var bounceC = function() {
 		}
 	    }
 	}
-	if (xcor + radius == 500 || xcor - radius == 0 || aroundx){
+	if (xcor + radius >= 500 || xcor - radius <= 0 || aroundx){
 	    xchange = xchange * -1;
 	}
 	//if you reach height limits
-	if (ycor + radius == 300 || ycor - radius == 0 || aroundy){
+	if (ycor + radius >= 300 || ycor - radius <= 0 || aroundy){
 	    ychange = ychange * -1;
 	}
 	c.setAttribute( "cx", xcor + xchange );
@@ -90,6 +90,8 @@ var bounceC = function() {
     return {
 	setxchange:setxchange,
 	setychange:setychange,
+	getxchange:getxchange,
+	getychange,getychange,
 	getc:getc,
 	getn:getn,
 	getx:getx,
@@ -138,13 +140,17 @@ function remove(){
 	console.log("stop pressing this button");
     }
 }
-/*
+
 function accelerate(){
     if (list.length != 0){
-	list.map(function(x) {x.setxchange(x.getxchange * 2); return x;});
+	list.map(function(x) {
+	    x.setxchange(x.getxchange() * 2);
+	    x.setychange(x.getychange() * 2);
+	    return x;
+	});
     }
 }
-*/
+
 accel.addEventListener("click", accelerate);
 deleting.addEventListener("click", remove);
 start.addEventListener("click",create);
