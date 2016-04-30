@@ -152,13 +152,13 @@ function filter(){
 	hold = list.filter(function(x){
 	    return (x.getr() >= 20);
 	});
-	console.log(hold);
-	console.log(hold[0].getn());
+	//console.log(hold);
+	//console.log(hold[0].getn());
 	if (hold != 0){
 	    list.map(function(x){
 		for (a in hold){
-		    console.log(a.getn());
-		    if (x == a){
+		    //console.log(hold[a].getn());
+		    if (x == hold[a]){
 			console.log("if");
 			x.setxchange(0);
 			x.setychange(0);
