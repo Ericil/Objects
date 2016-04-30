@@ -4,6 +4,7 @@ var start = document.getElementById("start");
 var stop = document.getElementById("stop");
 var deleting = document.getElementById("delete");
 var accel = document.getElementById("accel");
+var fil = document.getElementById("filter");
 var dict = {};
 var list = [];
 var current = 0;
@@ -14,7 +15,7 @@ var bounceC = function() {
     var number = current;
     var frameid;
     var c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    var radius = Math.floor(Math.random()*10) + 10;
+    var radius = Math.floor(Math.random()*20) + 10;
     var xcor = Math.floor(Math.random()*400) + 50;
     var ycor = Math.floor(Math.random()*200) + 50;
     var xchange = 1;
@@ -110,10 +111,6 @@ function create() {
     id.push(frameid);
     //list.push(hold);
     current++;
-    console.log(list);
-    for (x in list){
-	console.log(x);
-    }
 }
 
 function clear(){
@@ -121,16 +118,13 @@ function clear(){
     	pic.removeChild(list[other].getc());
     }
     list = [];
-    console.log(id);
     for (x in id){
-    	console.log(x);
     	clearInterval(id[x]);
     }
 }
 
 function remove(){
     if (list.length != 0){
-	console.log(list);
 	pic.removeChild(list[current-1].getc());
 	clearInterval(id[current-1]);
 	list.pop();
@@ -138,6 +132,7 @@ function remove(){
 	current--;
     }else{
 	console.log("stop pressing this button");
+	return;
     }
 }
 
@@ -151,7 +146,34 @@ function accelerate(){
     }
 }
 
+function filter(){
+    var hold = [];
+    if (list.length != 0){
+	hold = list.filter(function(x){
+	    return (x.getr() >= 20);
+	});
+	console.log(hold);
+	console.log(hold[0].getn());
+	if (hold != 0){
+	    list.map(function(x){
+		for (a in hold){
+		    console.log(a.getn());
+		    if (x == a){
+			console.log("if");
+			x.setxchange(0);
+			x.setychange(0);
+			return x;
+		}
+	    }
+	});
+	}
+    }
+}
+	
+
+
 accel.addEventListener("click", accelerate);
 deleting.addEventListener("click", remove);
 start.addEventListener("click",create);
 clearbutton.addEventListener("click", clear);
+fil.addEventListener("click", filter);
